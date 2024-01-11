@@ -20,27 +20,28 @@
 ```
 .
 ├── README.md
-├── app
-│   ├── __init__.py
+├── main.py
+├── modules
+│   ├── memo.py
+│   ├── pomodoro.py
+│   ├── remind.py
+│   └── todo.py
+├── static
+│   ├── data
+│   ├── images
 │   ├── scripts
 │   │   ├── memo.js
 │   │   ├── pomodoro.js
 │   │   ├── remind.js
 │   │   ├── script.js
 │   │   └── todo.js
-│   ├── static
-│   │   ├── images
-│   │   └── style.css
-│   └── templates
-│       ├── index.html
-│       ├── memo.html
-│       ├── pomodoro.html
-│       ├── remind.html
-│       └── todo.html
-├── config.py
-├── requirements.txt
-├── run.py
-└── venv
+│   └── style.css
+└── templates
+    ├── index.html
+    ├── memo.html
+    ├── pomodoro.html
+    ├── remind.html
+    └── todo.html
 ```
 
 ## 実装内容
