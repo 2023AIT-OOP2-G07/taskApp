@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>Todoリスト</title>
+</head>
+<body>
+    <h1>Todoリスト</h1>
+
+    <form action="{{ url_for('todo.new') }}" method="post">
+        <label for="new_text">新しいタスク:</label>
+        <input type="text" id="new_text" name="new_text" required>
+        <button type="submit">タスク追加</button>
+    </form>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                {{ task.text }}
+                {% if task.status == 0 %}
+                    <form action="{{ url_for('todo.complete') }}" method="post">
+                        <input type="hidden" name="id" value="{{ task.id }}">
+                        <button type="submit">完了</button>
+                    </form>
+                {% endif %}
+                <form action="{{ url_for('todo.update') }}" method="post">
+                    <input type="hidden" name="id" value="{{ task.id }}">
+                    <input type="text" id="update_text" name="text" value="{{ task.text }}" required>
+                    <button type="submit">更新</button>
+                </form>
+                <form action="{{ url_for('todo.delete') }}" method="post">
+                    <input type="hidden" name="id" value="{{ task.id }}">
+                    <button type="submit">削除</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
