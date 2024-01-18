@@ -6,6 +6,7 @@ const start_stop_button = document.getElementById("start_stop_button");
 const reset_button = document.getElementById("reset_button");
 const mode_change_button = document.getElementById("mode_change_button");
 const clear_log_button = document.getElementById("clear_log_button");
+const save_log_button = document.getElementById("save_log_button");
 const display_minute =  document.getElementById("display_minute");
 const display_second =  document.getElementById("display_second");
 const display_status =  document.getElementById("display_status");
@@ -193,6 +194,13 @@ class Log{
         this.log_data = "";
         this.update_display();
     }
+
+    get_log_json(){
+        let data = {
+            "log" : log.log_data
+        }
+        return data;
+    }
 }
 
 function handle_clicked_clear_log_button(){ // ログを削除する
@@ -206,6 +214,26 @@ function get_date(){
     ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }
 
+//引数で受け取ったjsonをflaskへ送る関数
+function post2flask(json){
+    fetch('/ここにアドレス', {
+        method: 'POST',
+        body: json, 
+        }).then((response) => {
+        // 正常に通信できるとここが実行されますが、今回はサーバー側を作っていないため、下のエラーへ必ず行きます
+        return false
+        }).catch(error => {
+        console.error(error)
+    })
+}
+
+//ログをjsonにまとめflaskへ送る処理を実行する関数
+function save_log(){
+    data = log.get_log_json();
+    post2flask(data);
+    console.log(data)
+}
+
 // ------------------↑↑↑↑ 関数やクラスの定義　↑↑↑↑↑-----------------------
 
 //　イベントを仕込む
@@ -216,6 +244,7 @@ for(let i=0; i<2; i++){
     apply_form_buttons[i].addEventListener("click", handle_clicked_apply_button);
 }
 clear_log_button.addEventListener("click", handle_clicked_clear_log_button);
+save_log_button.addEventListener("click", save_log);
 
 
 // インスタンスtimerの初期設定
