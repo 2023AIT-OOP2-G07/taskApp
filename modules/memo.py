@@ -1,14 +1,23 @@
-from flask import Blueprint, request, render_template, jsonify
+from flask import Flask, render_template, request, redirect, url_for
 
-app_memo = Blueprint('memo', __name__)
+app = Flask(__name__)
+
+# メモのリスト
+memos = []
+
+@app.route('/')
+def index():
+    return render_template('index.html', memos=memos)
+
+@app.route('/add_memo', methods=['POST'])
+def add_memo():
+    memo_content = request.form.get('memo_content')
+    if memo_content:
+        memos.append(memo_content)
+    return redirect(url_for('index'))
+
+if __name__ == '__main__':
+    app.run(debug=True)
 
 
-@app_memo.route('/memo')
-def memo():
-  """
-  Route decorator for the '/memo' endpoint.
 
-  Returns:
-      A rendered HTML template of 'memo.html'.
-  """
-  return render_template('memo.html')
