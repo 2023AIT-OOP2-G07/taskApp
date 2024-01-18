@@ -214,6 +214,15 @@ function get_date(){
     ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }
 
+//flaskへGETし、受け取ったjsonデータを返す関数
+function get2flask(){
+    let json_data;
+    fetch("ここにアドレス", {method: "GET"})
+        .then(response => response.json())
+        .then(json => json_data = json)
+    return json_data;
+}
+
 //引数で受け取ったjsonをflaskへ送る関数
 function post2flask(json){
     fetch('/ここにアドレス', {
@@ -234,7 +243,11 @@ function save_log(){
     console.log(data)
 }
 
-// ------------------↑↑↑↑ 関数やクラスの定義　↑↑↑↑↑-----------------------
+// ------------------↑↑↑↑↑ 関数やクラスの定義　↑↑↑↑↑-----------------------
+// ------------------↓↓↓↓↓ 起動時に実行　↓↓↓↓↓-----------------------
+
+json = get2flask();
+// ** saved_log = json["log"];
 
 //　イベントを仕込む
 start_stop_button.addEventListener("click", handle_clicked_start_stop_button);
@@ -255,6 +268,6 @@ const timer = new Timer(init_min, init_sec, 10, null, false, true);
 timer.update_display();
 
 // logの初期設定
-//const log = new Log(サーバから送られてきた保存記録); 
+// 88 const log = new Log(saved_log);  
 const log = new Log("");
 
