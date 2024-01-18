@@ -3,6 +3,7 @@ import modules
 
 app = Flask(__name__)
 app.register_blueprint(modules.memo_bp)
+app.register_blueprint(modules.pomodoro_bp)
 
 
 @app.route('/')
