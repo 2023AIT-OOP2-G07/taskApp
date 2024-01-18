@@ -3,7 +3,15 @@
     <head>
         <meta charset="utf-8">
         <title>ポモドーロタイマー</title>
-        <link rel="stylesheet" type="text/css" href="">
+        <style>
+            #log_box {
+                width: 600px;                /* 横幅を200pxに指定 */
+                height: 200px;               /* 横幅を200pxに指定 */
+                border: 1px solid #000;      /* わかりやすくボーダーを引く */
+                overflow-y: scroll;          /* 縦方向にスクロール可能にする */
+            }
+
+        </style>
     </head>
     <body>
         <div class="parent">
@@ -35,6 +43,13 @@
                     <input type="text" id="rest_form_second" value="00">
                     <button type="button" class="apply_form">適用</button>
                 </div>
+            </form>
+            <div id="log">
+                <div id="log_box">
+                    
+                </div>
+                <button id="clear_log_button">ログ削除</button>
+            </div>
 
         </div>
         <script src="../static/scripts/pomodoro.js"></script>
