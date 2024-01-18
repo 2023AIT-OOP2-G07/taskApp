@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>ポモドーロタイマー</title>
+        <style>
+            #log_box {
+                width: 600px;                /* 横幅を200pxに指定 */
+                height: 200px;               /* 横幅を200pxに指定 */
+                border: 1px solid #000;      /* わかりやすくボーダーを引く */
+                overflow-y: scroll;          /* 縦方向にスクロール可能にする */
+            }
+
+        </style>
+    </head>
+    <body>
+        <div class="parent">
+            <div id="timer">
+                <span id="display_status">WORKING</span>
+                <div id ="display_min_sec">
+                    <span id="display_minute">00</span> : <span id="display_second">00</span>
+                </div>
+                <div id="timer_buttons">
+                    <button type="button" id="start_stop_button">スタート</button>
+                    <button type="button" id="reset_button">リセット</button>
+                    <button type="button" id="mode_change_button">モードチェンジ</button>
+                </div>
+            </div>
+            <form id="setting_timer">
+                <div id="set_work_time">
+                    WORKING:
+                    <label for="minute">min</label>
+                    <input type="text" id="work_form_minute" value="25">
+                    <label for="second">sec</label>
+                    <input type="text" id="work_form_second" value="00">
+                    <button type="button" class="apply_form">適用</button>
+                </div>
+                <div id="set_rest_time">
+                    RESTING:
+                    <label for="minute">min</label>
+                    <input type="text" id="rest_form_minute" value="05">
+                    <label for="second">sec</label>
+                    <input type="text" id="rest_form_second" value="00">
+                    <button type="button" class="apply_form">適用</button>
+                </div>
+            </form>
+            <div id="log">
+                <div id="log_box">
+                    
+                </div>
+                <button id="clear_log_button">ログ削除</button>
+                <button id="save_log_button">ログ保存</button>
+            </div>
+
+        </div>
+        <script src="{{ url_for('static', filename='scripts/pomodoro.js') }}"></script>
+    </body>
+</html>
