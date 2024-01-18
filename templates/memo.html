@@ -1,20 +1,22 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモアプリ</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <h1>メモアプリ</h1>
 
-    <form action="{{ url_for('add_memo') }}" method="post">
-        <label for="memo_content">メモ内容:</label>
-        <input type="text" id="memo_content" name="memo_content" required>
-        <button type="submit">メモを追加</button>
+    <!-- メモの入力フォーム -->
+    <form action="/add_memo" method="post">
+        <label for="memo_text">メモを追加:</label>
+        <input type="text" id="memo_text" name="memo_text" required>
+        <button type="submit">追加</button>
     </form>
 
+    <!-- メモ一覧 -->
     <h2>メモ一覧</h2>
     <ul>
         {% for memo in memos %}
@@ -23,5 +25,9 @@
     </ul>
 </body>
 </html>
+
+
+
+
 
 
