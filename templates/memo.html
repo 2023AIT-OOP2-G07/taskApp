@@ -5,16 +5,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>メモアプリ</title>
+
+    <script defer src="{{ url_for('static', filename='scripts/memo.js') }}"></script>
 </head>
 <body>
     <h1>メモアプリ</h1>
 
     <!-- メモの入力フォーム -->
-    <form action="/add_memo" method="post">
+    <div>
         <label for="memo_text">メモを追加:</label>
         <input type="text" id="memo_text" name="memo_text" required>
         <button type="submit">追加</button>
-    </form>
+    </div>
 
     <!-- メモ一覧 -->
     <h2>メモ一覧</h2>
