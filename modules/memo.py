@@ -7,7 +7,7 @@ memos = []
 
 @app.route('/')
 def index():
-    return render_template('memo.html', memos=memos)
+    return render_template('index.html', memos=memos)
 
 @app.route('/add_memo', methods=['POST'])
 def add_memo():
