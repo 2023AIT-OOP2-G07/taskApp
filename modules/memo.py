@@ -14,11 +14,13 @@ app = Flask(__name__)
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }
+MEMO_FILE = "./static/data/memo_data.json"
 app.config['memo_dict']: dict[str, {str, str}] = {}
 
 
 @memo_blueprint.route('/memo')
 def index():
+    app.config['memo_dict'] = json.load(open(MEMO_FILE, 'r', encoding='utf-8'))
     return render_template('memo.html', memo_dict=app.config['memo_dict'])
 
 
@@ -39,9 +41,13 @@ def add_memo():
         key = request.form.get('memo_key', '')
         if key == '':
             key = datetime.now().strftime("%Y%m%d%H%M%S%f")
-            app.config['memo_dict'].update({key: {'title': title, 'body': body}})
+            app.config['memo_dict'].update(
+                {key: {'title': title, 'body': body}})
         else:
             app.config['memo_dict'][key]['body'] = body
+
+        json.dump(app.config['memo_dict'], open(
+            MEMO_FILE, 'w', encoding='utf-8'), indent=4)
 
     return redirect(url_for('memo.index'))
 
@@ -58,6 +64,9 @@ def suggest_memo_list():
     if key is not None:
         app.config['memo_dict'].pop(key)
 
+        json.dump(app.config['memo_dict'], open(
+            MEMO_FILE, 'w', encoding='utf-8'), indent=4)
+
     return redirect(url_for('memo.index'))
 
 
@@ -68,6 +77,8 @@ def get_memo_dict():
     パラメーター: なし
     戻り値: メモリストのjson文字列
     """
+    json.dump(app.config['memo_dict'], open(
+        MEMO_FILE, 'w', encoding='utf-8'), indent=4)
     return json.dumps(app.config['memo_dict'])
 
 
