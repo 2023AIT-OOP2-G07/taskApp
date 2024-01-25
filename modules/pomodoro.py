@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, Blueprint, jsonify
+from flask import Blueprint, render_template
+from flask import request, redirect, url_for, jsonify
 from datetime import datetime
 import json
-from flask import Blueprint, render_template
 
 pomodoro_bp = Blueprint('pomodoro', __name__)
 
 @pomodoro_bp.route('/pomodoro')
-def index():
+def pomodoro():
     return render_template('pomodoro.html')
 
 
