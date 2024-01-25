@@ -17,7 +17,7 @@ def get():  # 関数名は重複していなければなんでもよい
     # ローカルのファイルを全部読み込んで返すだけ
     with open("./static/data/pomodoro.json", mode='r') as f:
         json_load = json.load(f)
-        log = josn_load["log"]
+        log = json_load["log"]
     return jsonify({"log" : log })
 
 @pomodoro_bp.route('pomodoro/post', methods=['GET'])
