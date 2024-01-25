@@ -4,7 +4,7 @@ from modules import memo_bp, pomodoro_bp, todo_bp
 app = Flask(__name__)
 app.register_blueprint(memo_bp)
 app.register_blueprint(pomodoro_bp)
-
+app.register_blueprint(todo_bp)
 
 @app.route('/')
 def index():
