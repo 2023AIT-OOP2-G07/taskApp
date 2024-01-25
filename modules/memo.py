@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 # メモを格納するリスト
 # Example:
-#     app.config['memo_dict']: dict = {
+#     app.config['memo_dict'] = {
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }

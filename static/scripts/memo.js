@@ -50,8 +50,6 @@ async function memoEditBtn(e) {
   const memo_dict = await getMemoDict();
   const memo = memo_dict[key];
 
-  console.log(memo)
-
   memoCreateForm.style.display = "inline";
 
   memoEditKey.value = key;
@@ -62,6 +60,7 @@ async function memoEditBtn(e) {
   
 }
 
+// メモデータ取得
 async function getMemoDict() {
   const res = await fetch('/memo/get/memo_dict');
   return await res.json();
