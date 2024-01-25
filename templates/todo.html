@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+        <title>Todoリスト</title>
+        <script defer
+                src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+              rel="stylesheet"
+              integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+              crossorigin="anonymous">
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    </head>
+    <body class="p-3">
+        <h1>Todoリスト</h1>
+        <form action="{{ url_for("todo.new") }}" method="post">
+            <label for="new_text">新しいタスク:</label>
+            <input type="text" id="new_text" name="new_text" required />
+            <button type="submit" class="btn btn-primary">タスク追加</button>
+            <a href="{{ url_for("todo.get_data") }}" class="btn btn-info" download>link</a>
+        </form>
+        <script>
+            function send_toggle_complete(id,element) {
+                const form = new FormData();
+                form.append("id", id);
+                form.append("checked", (element.checked)?1:0);
+                console.log(id);
+                console.log(element.checked);
+                console.log((element.checked)?1:0);
+                fetch("{{url_for('todo.toggle_complete')}}", {
+                method: "POST",
+                body: form,
+                })
+                  /* .then((response) => response.json()) */
+                .then((response) => console.log(response))
+                .then((data) => {
+                    console.log("Success:", data);
+                    
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            }
+            function delete_task(id) {
+                const form = new FormData();
+                form.append("id", id);
+                console.log(id);
+                fetch("{{url_for('todo.delete')}}", {
+                method: "POST",
+                body: form,
+                })
+                  /* .then((response) => response.json()) */
+                .then((response) => console.log(response))
+                .then((data) => {
+                    console.log("Success:", data);
+                    return data;
+                })
+                .catch((error) => {
+                    console.error("Error:", error);
+                });
+            }
+
+        </script>
+        <form x-data="{'tasks':[]} "
+              x-init="tasks = await (await (await fetch('{{ url_for("todo.json_all") }}')).json()).map(task=>{task.checked= (task.status==1);console.log(task);return task})"
+              class="d-flex flex-column">
+            <template x-for="task in tasks">
+                <span name="taskitem">
+                    <div class="form-check form-check-inline btn-group">
+                        <input type="checkbox"
+                               x-bind:name="task.id"
+                               x-bind:id="task.id+ 'ckb'"
+                               @change="send_toggle_complete(task.id,$el)"
+                               x-bind:value="task.checked"
+                               class="form-check-input form-control form-control-sm" />
+                        <label x-bind:for="task.id+'ckb'"
+                               class="form-check-label form-control-sm align-middle">
+                            <span x-text="task.text"
+                                  x-bind:name="task.id"
+                                  x-bind:id="task.id+ 'label'"
+                                  class="align-middle"></span>
+                        </label>
+                        <button type="button"
+                                class="btn btn-secondary form-check-label form-control form-control-sm"
+                                x-on:click="()=>{delete_task(task.id);$el.closest('span[name=\'taskitem\']').remove()}">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+                    <!-- <div x-text="JSON.stringify(task)"></div> -->
+                </span>
+            </template>
+            <!-- tasks:
+            <div x-text="JSON.stringify(tasks)"></div> -->
+        </form>
+        <!-- <script async>
+        (async () => {
+            const current = document.currentScript;
+            const element = document.createElement('div')
+            element.innerHTML = 
+            await(JSON.stringify( await(await (await fetch('{{url_for("todo.json_all")}}')).json())));
+            current.parentNode.appendChild(element);
+        }
+        )();
+
+        </script> -->
+        <!-- todo.complete: {{ url_for("todo.complete") }} -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+                integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+                crossorigin="anonymous"></script>
+    </body>
+</html>
