@@ -26,6 +26,7 @@
   <form action="/memo/add" method="POST" class="memo_create_form">
     <h2 class="memo_title" name="memo_title">メモ・タイトル</h2>
     <input type="hidden" class="memo_title_hidden" name="memo_title">
+    <input type="hidden" class="memo_edit_key" name="memo_key">
     <div class="memo_textarea_content">
       <textarea name="memo_body" id="memo_textarea" class="memo_textarea"></textarea>
     </div>
@@ -45,7 +46,7 @@
       <li>{{ memo.title }}</li>
       <li>{{ memo.body }}</li>
       <form class="memo_list_suggest" action="/memo/list/suggest" method="POST">
-        <input type="hidden" class="memo_key"name="key" value="{{ key }}">
+        <input type="hidden" class="memo_key" name="key" value="{{ key }}">
         <button type="button" class="memo_edit" name="edit">編集</button>
         <button type="submit" class="memo_delete" name="delete">削除</button>
       </form>

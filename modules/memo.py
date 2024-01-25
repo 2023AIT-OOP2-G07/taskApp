@@ -1,6 +1,7 @@
 from crypt import methods
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, Blueprint
+import json
 
 memo_blueprint = Blueprint("memo", __name__)
 
@@ -29,14 +30,19 @@ def add_memo():
     戻り値: メモページへのリダイレクト
     """
     save = request.form.get('memo_save', None)
-    delete = request.form.get('memo_delete', None) # 実装する時に追加してください
+    # delete = request.form.get('memo_delete', None) # 実装する時に追加してください
 
     if save is not None:
         title = request.form.get('memo_title', '')
         body = request.form.get('memo_body', '')
-        key = datetime.now().strftime("%Y%m%d%H%M%S%f")
 
-        app.config['memo_dict'].update({key: {'title': title, 'body': body}})
+        key = request.form.get('memo_key', '')
+        if key == '':
+            key = datetime.now().strftime("%Y%m%d%H%M%S%f")
+            app.config['memo_dict'].update({key: {'title': title, 'body': body}})
+        else:
+            app.config['memo_dict'][key]['body'] = body
+
     return redirect(url_for('memo.index'))
 
 
@@ -49,6 +55,16 @@ def suggest_memo_list():
     """
     print(request.form)
     return redirect(url_for('memo.index'))
+
+
+@memo_blueprint.route('/memo/get/memo_dict', methods=['GET'])
+def get_memo_dict():
+    """
+    メモリストを取得するためのルート。メモリストを取得するGETリクエストを処理します。
+    パラメーター: なし
+    戻り値: メモリストのjson文字列
+    """
+    return json.dumps(app.config['memo_dict'])
 
 
 if __name__ == '__main__':

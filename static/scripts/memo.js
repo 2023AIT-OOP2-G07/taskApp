@@ -2,6 +2,12 @@
 const memoBtn = document.querySelector("#memo_button");
 const memoTxt = document.querySelector("#memo_text");
 const memoEdit_list = document.querySelectorAll(".memo_edit");
+const memoCreateForm = document.querySelector(".memo_create_form");
+const memoBody = document.querySelector(".memo_textarea");
+const memoTitle = document.querySelector(".memo_title");
+const memoTitleHidden = document.querySelector(".memo_title_hidden");
+const memoList = document.querySelector(".memo_list");
+const memoEditKey = document.querySelector(".memo_edit_key");
 
 // 初期値
 const memo_init_text = "タイトルを入力";
@@ -15,14 +21,11 @@ function docDOMContentLoaded(e) {
 function memoBtnClick(e) {
   if (memoTxt.value === memo_init_text) return;
 
-  const memoCreateForm = document.querySelector(".memo_create_form");
-  const memoTitle = document.querySelector(".memo_title");
-  const memoTitleHidden = document.querySelector(".memo_title_hidden");
-  const memoList = document.querySelector(".memo_list");
-
   memoCreateForm.style.display = "inline";
   memoTitle.textContent = memoTitleHidden.value = memoTxt.value;
   memoList.style.display = "none";
+
+  memoEditKey.value = memoBody.value = "";
 }
 
 // メモテキストクリック時の処理
@@ -40,10 +43,28 @@ function memoTxtKeydown(e) {
 }
 
 // メモ編集ボタンクリック時の処理
-function memoEditBtn(e) {
+async function memoEditBtn(e) {
   const memoEdit = document.querySelector(".memo_key");
   const key = memoEdit.value;
-  console.log(key);
+
+  const memo_dict = await getMemoDict();
+  const memo = memo_dict[key];
+
+  console.log(memo)
+
+  memoCreateForm.style.display = "inline";
+
+  memoEditKey.value = key;
+  memoTitle.textContent = memoTitleHidden.value = memoTxt.value = memo.title;
+  memoBody.value = memo.body;
+  
+  memoList.style.display = "none";
+  
+}
+
+async function getMemoDict() {
+  const res = await fetch('/memo/get/memo_dict');
+  return await res.json();
 }
 
 // イベントリスナーを設定
@@ -53,3 +74,4 @@ memoTxt.addEventListener("click", memoTxtClick);
 memoTxt.addEventListener("blur", memoTxtBlur)
 memoTxt.addEventListener("keydown", memoTxtKeydown);
 for (const memoEdit of memoEdit_list) memoEdit.addEventListener("click", memoEditBtn);
+
