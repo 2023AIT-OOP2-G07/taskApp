@@ -54,7 +54,7 @@ def suggest_memo_list():
     戻り値: メモページへのリダイレクト
     """
 
-    key = request.form('key', None)
+    key = request.form.get('key', None)
     if key is not None:
         app.config['memo_dict'].pop(key)
 
