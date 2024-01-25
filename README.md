@@ -27,25 +27,32 @@ flaskを使用して構築されたシンプルなメモアプリケーション
 ```
 .
 ├── README.md
+├── instance
+│   └── todo.sqlite
+├── k22084 _作業報告.md
 ├── main.py
 ├── modules
-│   ├── memo.py
-│   ├── pomodoro.py
-│   ├── remind.py
-│   └── todo.py
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   └── memo.cpython-311.pyc
+│   ├── memo.py
+│   ├── pomodoro.py
+│   ├── remind.py
+│   └── todo.py
 ├── static
-│   ├── data
-│   ├── images
-│   ├── scripts
-│   │   ├── memo.js
-│   │   ├── pomodoro.js
-│   │   ├── remind.js
-│   │   ├── script.js
-│   │   └── todo.js
-│   └── style.css
+│   ├── data
+│   ├── images
+│   ├── scripts
+│   │   ├── memo.js
+│   │   ├── pomodoro.js
+│   │   ├── remind.js
+│   │   ├── script.js
+│   │   └── todo.js
+│   └── style.css
 └── templates
     ├── index.html
     ├── memo.html
+    ├── memo_create_form.html
     ├── pomodoro.html
     ├── remind.html
     └── todo.html
