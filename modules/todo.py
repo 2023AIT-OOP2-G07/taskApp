@@ -27,9 +27,9 @@ def save_to_file(file_path, data):
 
 # ホームページのルート
 @todo_bp.route('/todo')
-def todo():
+def index():
     tasks = Task.query.all()
-    return render_template('todo.html', tasks=tasks)
+    return render_template("todo.html", tasks=tasks)
 
 # 新しいタスクの追加ルート
 @todo_bp.route('/new', methods=["POST"])
