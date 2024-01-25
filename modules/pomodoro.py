@@ -1,30 +1,32 @@
 from flask import Flask, render_template, request, redirect, url_for, Blueprint, jsonify
 from datetime import datetime
 import json
-
-pomodoro_blueprint = Blueprint("pomodoro", __name__)
-
-
-
-
 from flask import Blueprint, render_template
 
 pomodoro_bp = Blueprint('pomodoro', __name__)
 
-@pomodoro_bp.route('pomodoro/get', methods=['GET'])
+@pomodoro_bp.route('/pomodoro')
+def index():
+    return render_template('pomodoro.html')
+
+
+@pomodoro_bp.route('/pomodoro/get', methods=['GET'])
 def get():  # 関数名は重複していなければなんでもよい
     result = ""
     # ローカルのファイルを全部読み込んで返すだけ
     with open("./static/data/pomodoro.json", mode='r') as f:
+        print("test1")
         json_load = json.load(f)
+        print("test2")
+        print(json_load)
         log = json_load["log"]
     return jsonify({"log" : log })
 
-@pomodoro_bp.route('pomodoro/post', methods=['GET'])
+@pomodoro_bp.route('/pomodoro/post', methods=['POST'])
 def post():
-    result = request.json()
+    result = request.json
     # パラメータをローカルのファイルに書き込むだけ
-    with open("./static/data/pomodoro.json", mode='a') as f:
+    with open("./static/data/pomodoro.json", mode='a', encoding = 'utf-8') as f:
         json.dump(result, f, indent = 2)
-    return 200
+    return "200"
     

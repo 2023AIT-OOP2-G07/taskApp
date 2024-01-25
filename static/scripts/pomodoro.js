@@ -217,17 +217,20 @@ function get_date(){
 //flaskへGETし、受け取ったjsonデータを返す関数
 function get2flask(){
     let json_data;
-    fetch("ここにアドレス", {method: "GET"})
+    fetch("/pomodoro/get", {method: "GET"})
         .then(response => response.json())
-        .then(json => json_data = json)
+        .then(json => console.log(json))
     return json_data;
 }
 
 //引数で受け取ったjsonをflaskへ送る関数
 function post2flask(json){
-    fetch('/ここにアドレス', {
+    fetch('/pomodoro/post', {
         method: 'POST',
-        body: json, 
+        headers: {
+            'Content-Type': 'application/json; charset=utf-8'
+        },
+        body: JSON.stringify(json), 
         }).then((response) => {
         // 正常に通信できるとここが実行されますが、今回はサーバー側を作っていないため、下のエラーへ必ず行きます
         return false
@@ -247,7 +250,8 @@ function save_log(){
 // ------------------↓↓↓↓↓ 起動時に実行　↓↓↓↓↓-----------------------
 
 json = get2flask();
-// ** saved_log = json["log"];
+console.log(json);
+saved_log = json["log"];
 
 //　イベントを仕込む
 start_stop_button.addEventListener("click", handle_clicked_start_stop_button);
@@ -268,6 +272,5 @@ const timer = new Timer(init_min, init_sec, 10, null, false, true);
 timer.update_display();
 
 // logの初期設定
-// 88 const log = new Log(saved_log);  
-const log = new Log("");
+const log = new Log(saved_log);  
 
