@@ -2,7 +2,7 @@ from crypt import methods
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, Blueprint
 
-memo_blueprint = Blueprint("memo", __name__)
+memo_bp = Blueprint("memo", __name__)
 
 # Flaskアプリケーションの作成
 app = Flask(__name__)
@@ -13,15 +13,15 @@ app = Flask(__name__)
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }
-app.config['memo_dict']: dict[str, {str, str}] = {}
+app.config['memo_dict'] = dict()
 
 
-@memo_blueprint.route('/memo')
+@memo_bp.route('/memo')
 def index():
     return render_template('memo.html', memo_dict=app.config['memo_dict'])
 
 
-@memo_blueprint.route('/memo/add', methods=['POST'])
+@memo_bp.route('/memo/add', methods=['POST'])
 def add_memo():
     """
     メモを追加するためのルート。メモリストにメモを追加するPOSTリクエストを処理します。
@@ -40,7 +40,7 @@ def add_memo():
     return redirect(url_for('memo.index'))
 
 
-@memo_blueprint.route('/memo/list/suggest', methods=['POST'])
+@memo_bp.route('/memo/list/suggest', methods=['POST'])
 def suggest_memo_list():
     """
     メモリストを取得し編集するためのルート。メモリストを取得するPOSTリクエストを処理します。
