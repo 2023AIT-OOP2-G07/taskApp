@@ -26,7 +26,7 @@ def get():  # 関数名は重複していなければなんでもよい
 def post():
     result = request.json
     # パラメータをローカルのファイルに書き込むだけ
-    with open("./static/data/pomodoro.json", mode='a', encoding = 'utf-8') as f:
+    with open("./static/data/pomodoro.json", mode='w', encoding = 'utf-8') as f:
         json.dump(result, f, indent = 2)
     return "200"
     
