@@ -182,13 +182,12 @@ class Log{
 
     //web側、システム側の両方にログを追加する
     add_log(log_content){
-        if(this.log_data == "" && log_content == ""){
-            this.log_data += log_content;
-        }else if(this.log_data == "" && log_content != ""){
-            this.log_data += log_content;
-        }else{
-            this.log_data += log_content + "\n";
+        if(this.log_data != "" && log_content != ""){
+            console.log("test1")
+            this.log_data += "\n";
         }
+        console.log("test2")
+        this.log_data += log_content;
         
         this.update_display();
     }
