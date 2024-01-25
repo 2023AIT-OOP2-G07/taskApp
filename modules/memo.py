@@ -13,7 +13,7 @@ app = Flask(__name__)
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }
-app.config['memo_dict']: dict[str, {str, str}] = {}
+app.config['memo_dict'] = dict()
 
 
 @memo_blueprint.route('/memo')
