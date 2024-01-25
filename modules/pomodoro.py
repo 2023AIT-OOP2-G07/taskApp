@@ -6,7 +6,12 @@ pomodoro_blueprint = Blueprint("pomodoro", __name__)
 
 
 
-@pomodoro_blueprint.route('pomodoro/get', methods=['GET'])  # Getだけ受け付ける
+
+from flask import Blueprint, render_template
+
+pomodoro_bp = Blueprint('pomodoro', __name__)
+
+@pomodoro_bp.route('pomodoro/get', methods=['GET'])
 def get():  # 関数名は重複していなければなんでもよい
     result = ""
     # ローカルのファイルを全部読み込んで返すだけ
@@ -15,10 +20,11 @@ def get():  # 関数名は重複していなければなんでもよい
         log = josn_load["log"]
     return jsonify({"log" : log })
 
-@pomodoro_blueprint.route("./static/data/pomodoro.json", methods=['POST'])  # Postだけ受け付ける
+@pomodoro_bp.route('pomodoro/post', methods=['GET'])
 def post():
     result = request.json()
     # パラメータをローカルのファイルに書き込むだけ
-    with open("./datafile", mode='a') as f:
+    with open("./static/data/pomodoro.json", mode='a') as f:
         json.dump(result, f, indent = 2)
     return 200
+    
