@@ -1,35 +1,58 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>メモアプリ</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>メモアプリ</title>
 
-    <script defer src="{{ url_for('static', filename='scripts/memo.js') }}"></script>
+  <script defer src="{{ url_for('static', filename='scripts/memo.js') }}"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 </head>
+
 <body>
-    <h1>メモアプリ</h1>
+  <h1>メモアプリ</h1>
 
-    <!-- メモの入力フォーム -->
-    <div>
-        <label for="memo_text">メモを追加:</label>
-        <input type="text" id="memo_text" name="memo_text" required>
-        <button type="submit">追加</button>
+  <!-- メモの入力フォーム -->
+  <div>
+    <label for="memo_text">メモを追加:</label>
+    <input type="text" id="memo_text" name="memo_text" required>
+    <button type="button" id="memo_button">追加</button>
+  </div>
+
+  <input type="hidden" name="">
+
+  <form action="/memo/add" method="POST" class="memo_create_form">
+    <h2 class="memo_title" name="memo_title">メモ・タイトル</h2>
+    <input type="hidden" class="memo_title_hidden" name="memo_title">
+    <div class="memo_textarea_content">
+      <textarea name="memo_body" id="memo_textarea" class="memo_textarea"></textarea>
     </div>
+    <div class="memo_textarea_buttons">
+      <button class="memo_textarea_save" type="submit" name="memo_save">保存</button>
+      <button class="memo_textarea_delete" type="submit" name="memo_delete">取り消す</button>
+    </div>
+  </form>
 
+
+  <div class="memo_list">
     <!-- メモ一覧 -->
     <h2>メモ一覧</h2>
     <ul>
-        {% for memo in memos %}
-            <li>{{ memo }}</li>
-        {% endfor %}
+      {% for key, memo in memo_dict.items() %}
+      <hr>
+      <li>{{ memo.title }}</li>
+      <li>{{ memo.body }}</li>
+      <form class="memo_list_suggest" action="/memo/list/suggest" method="POST">
+        <input type="hidden" class="memo_key"name="key" value="{{ key }}">
+        <button type="button" class="memo_edit" name="edit">編集</button>
+        <button type="submit" class="memo_delete" name="delete">削除</button>
+      </form>
+      <hr>
+      {% endfor %}
     </ul>
+  </div>
 </body>
+
 </html>
-
-
-
-
-
-
