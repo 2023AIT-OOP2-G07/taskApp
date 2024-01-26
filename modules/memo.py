@@ -8,14 +8,14 @@ memo_bp = Blueprint("memo", __name__)
 # Flaskアプリケーションの作成
 app = Flask(__name__)
 
+MEMO_FILE = './static/data/memo_data.json'
+
 # メモを格納するリスト
 # Example:
 #     app.config['memo_dict'] = {
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }
-
-MEMO_FILE = "./static/data/memo_data.json"
 app.config['memo_dict']: dict[str, {str, str}] = {}
 
 
@@ -43,7 +43,8 @@ def add_memo():
         if key == '':
             key = datetime.now().strftime("%Y%m%d%H%M%S%f")
             app.config['memo_dict'].update(
-                {key: {'title': title, 'body': body}})
+                {key: {'title': title, 'body': body}}
+            )
         else:
             app.config['memo_dict'][key]['body'] = body
 
