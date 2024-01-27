@@ -8,150 +8,120 @@ from flask import (
     jsonify,
     current_app,
 )
-from flask_sqlalchemy import SQLAlchemy
 import os
+import json
 
 # Flask Blueprintの作成
 todo_bp = Blueprint("todo", __name__)
 
-# SQLAlchemyの初期化
-db = SQLAlchemy()
+# データファイルのパス
+data_file_path = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "todo_data.json"
+)
 
 
-# Taskクラスの定義
-class Task(db.Model):
-    __tablename__ = "tasks"
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    text = db.Column(db.Text())
-    status = db.Column(db.Integer)
+# データを読み込む関数
+def load_data():
+    if os.path.exists(data_file_path):
+        with open(data_file_path, "r") as file:
+            data = json.load(file)
+        return data
+    else:
+        return []
 
 
-# データベーステーブルを作成する関数
-def create_tables():
-    with current_app.app_context():
-        db.create_all()
-
-
-# ファイルにデータを保存する関数
-def save_to_file(file_path, data):
-    with open(file_path, "w") as file:
-        file.write(data)
+# データを保存する関数
+def save_data(data):
+    with open(data_file_path, "w") as file:
+        json.dump(data, file)
 
 
 # ホームページのルート
-@todo_bp.route("/")
-def index():
-    tasks = Task.query.all()
+@todo_bp.route("/todo")
+def todo():
+    tasks = load_data()
     return render_template("todo.html", tasks=tasks)
 
 
 # 新しいタスクの追加ルート
 @todo_bp.route("/new", methods=["POST"])
 def new():
-    task = Task()
-    task.text = request.form["new_text"]
-    task.status = 0
-    db.session.add(task)
-    db.session.commit()
-    return redirect(url_for("todo.index"))
+    data = load_data()
+    new_task = {"id": len(data) + 1, "text": request.form["new_text"], "status": 0}
+    data.append(new_task)
+    save_data(data)
+    return redirect(url_for("todo.todo"))
 
 
 # 完了処理ルート
 @todo_bp.route("/complete", methods=["POST"])
 def complete():
-    id = request.form["id"]
-    task = Task.query.filter_by(id=id).first()
-    task.status = 1
-    db.session.commit()
-    return redirect(url_for("todo.index"))
+    data = load_data()
+    id = int(request.form["id"])
+    for task in data:
+        if task["id"] == id:
+            task["status"] = 1
+            break
+    save_data(data)
+    return redirect(url_for("todo.todo"))
 
 
 @todo_bp.route("/toggle_complete", methods=["POST"])
 def toggle_complete():
-    id = request.form["id"]
-    task = Task.query.filter_by(id=id).first()
-    task.status = int(request.form["checked"])
-    db.session.commit()
-    return redirect(url_for("todo.index"))
+    data = load_data()
+    id = int(request.form["id"])
+    for task in data:
+        if task["id"] == id:
+            task["status"] = int(request.form["checked"])
+            break
+    save_data(data)
+    return redirect(url_for("todo.todo"))
 
 
 # 更新処理ルート
 @todo_bp.route("/update", methods=["POST"])
 def update():
-    id = request.form["id"]
+    data = load_data()
+    id = int(request.form["id"])
     text = request.form["text"]
-    task = Task.query.filter_by(id=id).first()
-    task.text = text
-    db.session.commit()
-    return redirect(url_for("todo.index"))
+    for task in data:
+        if task["id"] == id:
+            task["text"] = text
+            break
+    save_data(data)
+    return redirect(url_for("todo.todo"))
 
 
 # 削除処理ルート
 @todo_bp.route("/delete", methods=["POST"])
 def delete():
-    id = request.form["id"]
-    task = Task.query.filter_by(id=id).first()
-    db.session.delete(task)
-    db.session.commit()
-    return redirect(url_for("todo.index"))
+    data = load_data()
+    id = int(request.form["id"])
+    data = [task for task in data if task["id"] != id]
+    save_data(data)
+    return redirect(url_for("todo.todo"))
 
 
 # APIエンドポイントのルート
 @todo_bp.route("/api/get_data")
 def get_data():
-    tasks = Task.query.all()
-    task_list = [
-        {"id": task.id, "text": task.text, "status": task.status} for task in tasks
-    ]
-    return jsonify(task_list)
-
-
-@todo_bp.route("/api/sync_json")
-def sync_json():
-    print("get_data", flush=True)
-    # データベースから全てのタスクを取得し、JSON形式でクライアントに返す
-    tasks = Task.query.all()
-    task_list = [
-        {
-            "id": task.id,
-            "text": task.text,
-            "status": task.status,
-            # "extra": task.extra if task.extra != None else "",
-        }
-        for task in tasks
-    ]
-    # print(tasks.__dict__.values())
-    # # return jsonify(tasks.__dict__)
-    # return "a"
-    return task_list
+    tasks = load_data()
+    return jsonify(tasks)
 
 
 @todo_bp.route("/json/all")
 def json_all():
-    tasks = Task.query.all()
-    return jsonify(
-        [
-            {
-                "id": task.id,
-                "text": task.text,
-                "status": task.status,
-                # "extra": task.extra if task.extra != None else "",
-            }
-            for task in tasks
-        ]
-    )
+    return load_data()
 
 
 # FlaskアプリケーションをBlueprintで初期化する関数
 def create_app():
     app = Flask(__name__)
     app.config["SECRET_KEY"] = "secret_key"
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///todo.sqlite"
-    db.init_app(app)
+
     # BlueprintをFlaskアプリケーションに登録
     app.register_blueprint(todo_bp, url_prefix="/todo")
-    with app.app_context():
-        create_tables()
+
     return app
 
 
