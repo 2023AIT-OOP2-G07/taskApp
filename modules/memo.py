@@ -1,23 +1,27 @@
 from crypt import methods
 from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for, Blueprint
+import json
 
 memo_bp = Blueprint("memo", __name__)
 
 # Flaskアプリケーションの作成
 app = Flask(__name__)
 
+MEMO_FILE = './static/data/memo_data.json'
+
 # メモを格納するリスト
 # Example:
-#     app.config['memo_dict']: dict = {
+#     app.config['memo_dict'] = {
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }
-app.config['memo_dict'] = dict()
+app.config['memo_dict']: dict[str, {str, str}] = {}
 
 
 @memo_bp.route('/memo')
 def index():
+    app.config['memo_dict'] = json.load(open(MEMO_FILE, 'r', encoding='utf-8'))
     return render_template('memo.html', memo_dict=app.config['memo_dict'])
 
 
@@ -29,14 +33,24 @@ def add_memo():
     戻り値: メモページへのリダイレクト
     """
     save = request.form.get('memo_save', None)
-    delete = request.form.get('memo_delete', None) # 実装する時に追加してください
+    # delete = request.form.get('memo_delete', None) # 実装する時に追加してください
 
     if save is not None:
         title = request.form.get('memo_title', '')
         body = request.form.get('memo_body', '')
-        key = datetime.now().strftime("%Y%m%d%H%M%S%f")
 
-        app.config['memo_dict'].update({key: {'title': title, 'body': body}})
+        key = request.form.get('memo_key', '')
+        if key == '':
+            key = datetime.now().strftime("%Y%m%d%H%M%S%f")
+            app.config['memo_dict'].update(
+                {key: {'title': title, 'body': body}}
+            )
+        else:
+            app.config['memo_dict'][key]['body'] = body
+
+        json.dump(app.config['memo_dict'], open(
+            MEMO_FILE, 'w', encoding='utf-8'), indent=4)
+
     return redirect(url_for('memo.index'))
 
 
@@ -47,8 +61,27 @@ def suggest_memo_list():
     パラメーター: なし
     戻り値: メモページへのリダイレクト
     """
-    print(request.form)
+
+    key = request.form.get('key', None)
+    if key is not None:
+        app.config['memo_dict'].pop(key)
+
+        json.dump(app.config['memo_dict'], open(
+            MEMO_FILE, 'w', encoding='utf-8'), indent=4)
+
     return redirect(url_for('memo.index'))
+
+
+@memo_bp.route('/memo/get/memo_dict', methods=['GET'])
+def get_memo_dict():
+    """
+    メモリストを取得するためのルート。メモリストを取得するGETリクエストを処理します。
+    パラメーター: なし
+    戻り値: メモリストのjson文字列
+    """
+    json.dump(app.config['memo_dict'], open(
+        MEMO_FILE, 'w', encoding='utf-8'), indent=4)
+    return json.dumps(app.config['memo_dict'])
 
 
 if __name__ == '__main__':
