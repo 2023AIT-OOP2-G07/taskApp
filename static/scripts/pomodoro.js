@@ -171,21 +171,24 @@ function change_background_color(){
 }
 
 class Log{
-    constructor(log_data){
-        //web側のlogboxには、log_dataの文字列が表示される
-        this.log_data = log_data;
-    }
-    
+
+    log_data = "";
+
     //web側の表示をlog_dataの値で上書きする
     update_display(){
         log_box.innerText = this.log_data;
-        console.log("nekotest")
         log_box.scroll(0,log_box.scrollHeight);
     }
 
     //web側、システム側の両方にログを追加する
     add_log(log_content){
-        this.log_data += log_content + "\n" ;
+        if(this.log_data != "" && log_content != ""){
+            console.log("test1")
+            this.log_data += "\n";
+        }
+        console.log("test2")
+        this.log_data += log_content;
+        
         this.update_display();
     }
 
@@ -201,6 +204,32 @@ class Log{
         }
         return data;
     }
+
+    //flaskへGETし、受け取ったjsonデータを返す関数
+    get2flask(){
+        fetch("/pomodoro/get", {method: "GET"})
+            .then(response => response.json())
+            .then(json => {
+                this.add_log(json["log"])
+                console.log(json)
+            })
+    }
+
+    //引数で受け取ったjsonをflaskへ送る関数
+    post2flask(json){
+        fetch('/pomodoro/post', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(json), 
+            }).then((response) => {
+            // 正常に通信できるとここが実行されますが、今回はサーバー側を作っていないため、下のエラーへ必ず行きます
+            return false
+            }).catch(error => {
+            console.error(error)
+        })
+    }
 }
 
 function handle_clicked_clear_log_button(){ // ログを削除する
@@ -214,40 +243,19 @@ function get_date(){
     ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }
 
-//flaskへGETし、受け取ったjsonデータを返す関数
-function get2flask(){
-    let json_data;
-    fetch("ここにアドレス", {method: "GET"})
-        .then(response => response.json())
-        .then(json => json_data = json)
-    return json_data;
-}
-
-//引数で受け取ったjsonをflaskへ送る関数
-function post2flask(json){
-    fetch('/ここにアドレス', {
-        method: 'POST',
-        body: json, 
-        }).then((response) => {
-        // 正常に通信できるとここが実行されますが、今回はサーバー側を作っていないため、下のエラーへ必ず行きます
-        return false
-        }).catch(error => {
-        console.error(error)
-    })
-}
 
 //ログをjsonにまとめflaskへ送る処理を実行する関数
 function save_log(){
     data = log.get_log_json();
-    post2flask(data);
+    log.post2flask(data);
     console.log(data)
 }
 
 // ------------------↑↑↑↑↑ 関数やクラスの定義　↑↑↑↑↑-----------------------
 // ------------------↓↓↓↓↓ 起動時に実行　↓↓↓↓↓-----------------------
-
-json = get2flask();
-// ** saved_log = json["log"];
+// logの初期設定
+const log = new Log();  
+log.get2flask();
 
 //　イベントを仕込む
 start_stop_button.addEventListener("click", handle_clicked_start_stop_button);
@@ -259,7 +267,6 @@ for(let i=0; i<2; i++){
 clear_log_button.addEventListener("click", handle_clicked_clear_log_button);
 save_log_button.addEventListener("click", save_log);
 
-
 // インスタンスtimerの初期設定
 const init_min = work_form_minute.value
 const init_sec = work_form_second.value
@@ -267,7 +274,4 @@ const timer = new Timer(init_min, init_sec, 10, null, false, true);
 //web側のタイマー表示の初期設定
 timer.update_display();
 
-// logの初期設定
-// 88 const log = new Log(saved_log);  
-const log = new Log("");
 
