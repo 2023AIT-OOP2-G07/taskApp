@@ -16,7 +16,7 @@ MEMO_FILE = './static/data/memo_data.json'
 #         '20220101120000': {'title': 'Meeting', 'body': 'Prepare presentation'},
 #         '20220102153000': {'title': 'Shopping List', 'body': 'Milk, Eggs, Bread'}
 #     }
-app.config['memo_dict']: dict[str, {str, str}] = {}
+app.config['memo_dict'] = dict()
 
 
 @memo_bp.route('/memo')
