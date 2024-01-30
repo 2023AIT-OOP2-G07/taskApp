@@ -1,17 +1,36 @@
-# taskApp
+# おたすけタスク
 
-## 開発における注意事項
-- 編集する時はbrunch分けをすること
+## コンセプト
+### シンプルで汎用性のある3in1思考整理アプリケーション
+- 複数のアプリを開かなくていい
+- 複雑な機能はなく、わかりやすい
 
 ## 主な機能
-- ToDo
-- リマインド機能（余裕があれば）
+- ToDoリスト
+- ~~リマインド機能（余裕があれば）~~
 - メモ
 - ポモドーロタイマー
 - メモやToDoの内容を保持
+- ポモドーロタイマーのログを保持
 
 ## 操作方法・画面の説明
-- 
+- メモ
+  - aa
+
+- ポモドーロタイマー
+  - aa
+
+- ToDoリスト
+  - aa
+
+<br>
+<br>
+<br>
+
+### 以下開発関連↓↓
+
+## 開発における注意事項
+- 編集する時はbrunch分けをすること
 
 ## 役割分担
 - メモ
@@ -38,24 +57,26 @@
 ├── README.md
 ├── instance
 │   └── todo.sqlite
-├── k22084 _作業報告.md
 ├── main.py
 ├── modules
 │   ├── __init__.py
 │   ├── __pycache__
-│   │   └── memo.cpython-311.pyc
+│   │   ├── __init__.cpython-311.pyc
+│   │   ├── memo.cpython-311.pyc
+│   │   ├── pomodoro.cpython-311.pyc
+│   │   └── todo.cpython-311.pyc
 │   ├── memo.py
 │   ├── pomodoro.py
-│   ├── remind.py
 │   └── todo.py
+├── pyproject.toml
 ├── static
 │   ├── data
-│   ├── images
+│   │   ├── memo_data.json
+│   │   ├── pomodoro.json
+│   │   └── todo_data.json
 │   ├── scripts
 │   │   ├── memo.js
 │   │   ├── pomodoro.js
-│   │   ├── remind.js
-│   │   ├── script.js
 │   │   └── todo.js
 │   └── style.css
 └── templates
@@ -63,6 +84,5 @@
     ├── memo.html
     ├── memo_create_form.html
     ├── pomodoro.html
-    ├── remind.html
     └── todo.html
 ```

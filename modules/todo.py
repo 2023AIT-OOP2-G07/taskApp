@@ -16,7 +16,7 @@ todo_bp = Blueprint("todo", __name__)
 
 # データファイルのパス
 data_file_path = os.path.join(
-    os.path.dirname(os.path.abspath(__file__)), "todo_data.json"
+    os.path.dirname(os.path.abspath(__file__)), "../static/data/todo_data.json"
 )
 
 
