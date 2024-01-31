@@ -4,17 +4,26 @@
         <meta charset="utf-8">
         <title>ポモドーロタイマー</title>
         <style>
+            #top {
+                font-size: 25pt;
+                text-align: center;
+                margin: 25px
+            }
             #log_box {
-                width: 600px;                /* 横幅を200pxに指定 */
+                width: 400px;                /* 横幅を200pxに指定 */
                 height: 200px;               /* 横幅を200pxに指定 */
                 border: 1px solid #000;      /* わかりやすくボーダーを引く */
                 overflow-y: scroll;          /* 縦方向にスクロール可能にする */
+            }
+            #display_min_sec {
+                color: #316cf4;
+                font-size: 27pt;
             }
 
         </style>
     </head>
     <body>
-        <h1>ポモドーロタイマー</h1>
+        <div id="top">ポモドーロタイマー</div>
         <div class="parent">
             <div id="timer">
                 <span id="display_status">WORKING</span>
@@ -27,6 +36,8 @@
                     <button type="button" id="mode_change_button">モードチェンジ</button>
                 </div>
             </div>
+            <br>
+            <br>
             <form id="setting_timer">
                 <div id="set_work_time">
                     WORKING:
@@ -36,6 +47,7 @@
                     <input type="text" id="work_form_second" value="00">
                     <button type="button" class="apply_form">適用</button>
                 </div>
+                <br>
                 <div id="set_rest_time">
                     RESTING:
                     <label for="minute">min</label>
@@ -45,6 +57,8 @@
                     <button type="button" class="apply_form">適用</button>
                 </div>
             </form>
+            <br>
+            <br>
             <div id="log">
                 <div id="log_box">
                 </div>
