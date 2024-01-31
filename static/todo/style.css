@@ -1,0 +1,49 @@
+li.list-group-item:last-child,
+li.list-group-item:last-child > div.input-group,
+li.list-group-item:last-child > div.input-group > div.input-group-text,
+li.list-group-item:last-child > div.input-group > div.input-group-text > label,
+li.list-group-item:last-child > div.input-group > div.input-group-text > span {
+  border-radius: 0 0 var(--bs-border-radius) var(--bs-border-radius);
+}
+
+li.list-group-item:last-child > div.input-group > span > button {
+  border-radius: 0 0 var(--bs-border-radius) 0;
+}
+
+li.list-group-item:nth-child(2),
+li.list-group-item:nth-child(2) > div.input-group,
+li.list-group-item:nth-child(2) > div.input-group > div.input-group-text,
+li.list-group-item:nth-child(2)
+  > div.input-group
+  > div.input-group-text
+  > label,
+li.list-group-item:nth-child(2)
+  > div.input-group
+  > div.input-group-text
+  > span {
+  border-radius: var(--bs-border-radius) var(--bs-border-radius) 0 0;
+}
+li.list-group-item:nth-child(2) > div.input-group > span > button {
+  border-radius: 0 var(--bs-border-radius) 0 0;
+}
+
+li.list-group-item:not(:nth-child(2), :last-child),
+li.list-group-item:not(:nth-child(2), :last-child) > div.input-group,
+li.list-group-item:not(:nth-child(2), :last-child)
+  > div.input-group
+  > div.input-group-text
+  li.list-group-item:not(:nth-child(2), :last-child)
+  > div.input-group
+  > div.input-group-text
+  > label,
+li.list-group-item:not(:nth-child(2), :last-child)
+  > div.input-group
+  > div.input-group-text
+  > span,
+li.list-group-item:not(:nth-child(2), :last-child)
+  > div.input-group
+  > span
+  > button,
+li.list-group-item:not(:nth-child(2), :last-child) > div:nth-child(1) > div {
+  border-radius: 0;
+}
