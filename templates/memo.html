@@ -10,51 +10,69 @@
 
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css')}}">
 
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 
 <body>
-  <h1>メモアプリ</h1>
+  <h1 class="display-1 text-center">メモアプリ</h1>
 
   <!-- メモの入力フォーム -->
-  <div>
-    <label for="memo_text">メモを追加:</label>
-    <input type="text" id="memo_text" name="memo_text" required>
-    <button type="button" id="memo_button">追加</button>
+
+  <div class="input-group mb3">
+    <span class="input-group-text">メモを追加</span>
+    <input type="text" id="memo_text" name="memo_text" class="form-control" required>
+    <button type="button" id="memo_button" class="btn btn-primary">追加</button>
   </div>
 
   <input type="hidden" name="">
 
-  <form action="/memo/add" method="POST" class="memo_create_form">
-    <h2 class="memo_title" name="memo_title">メモ・タイトル</h2>
-    <input type="hidden" class="memo_title_hidden" name="memo_title">
-    <input type="hidden" class="memo_edit_key" name="memo_key">
-    <div class="memo_textarea_content">
-      <textarea name="memo_body" id="memo_textarea" class="memo_textarea"></textarea>
-    </div>
-    <div class="memo_textarea_buttons">
-      <button class="memo_textarea_save" type="submit" name="memo_save">保存</button>
-      <button class="memo_textarea_delete" type="submit" name="memo_delete">取り消す</button>
-    </div>
-  </form>
+  <div class="row">
+    <form action="/memo/add" method="POST" class="memo_create_form">
+      <h2 class="memo_title" name="memo_title">メモ・タイトル</h2>
+      <input type="hidden" class="memo_title_hidden" name="memo_title">
+      <input type="hidden" class="memo_edit_key" name="memo_key">
+      <div class="memo_textarea_content">
+        <textarea name="memo_body" id="memo_textarea" class="memo_textarea"></textarea>
+      </div>
+      <div class="row">
+        <div class="col d-grid">
+          <button class="memo_textarea_save btn btn-primary" type="submit" name="memo_save">保存</button>
+        </div>
+        <div class="col d-grid">
+          <button class="memo_textarea_delete btn btn-danger" type="submit" name="memo_delete">取り消す</button>
+        </div>
+      </div>
+    </form>
+  </div>
 
 
-  <div class="memo_list">
-    <!-- メモ一覧 -->
-    <h2>メモ一覧</h2>
-    <ul>
+
+  <h2 class="text-center">メモ一覧</h2>
+  <div class="memo_list overflow-y-scroll" style="height: 80vh">
+    <div class="row row-cols-2 gx-1 gy-2">
       {% for key, memo in memo_dict.items() %}
-      <hr>
-      <li>{{ memo.title }}</li>
-      <li>{{ memo.body }}</li>
-      <form class="memo_list_suggest" action="/memo/list/suggest" method="POST">
-        <input type="hidden" class="memo_key" name="key" value="{{ key }}">
-        <button type="button" class="memo_edit" name="edit">編集</button>
-        <button type="submit" class="memo_delete" name="delete">削除</button>
-      </form>
-      <hr>
+      <div class="col">
+        <div class="card">
+          <div class="card-header text-center">{{ memo.title }}</div>
+          <div class="card-body" style="white-space: pre-line;">{{ memo.body }}</div>
+
+          <div class="card-footer text-body-secondary">
+            <form class="memo_list_suggest" action="/memo/list/suggest" method="POST">
+              <div class="row gx-5">
+                <input type="hidden" class="memo_key" name="key" value="{{ key }}">
+                <div class="col">
+                  <button type="button" class="memo_edit btn btn-primary" name="edit">編集</button>
+                </div>
+                <div class="col">
+                  <button type="submit" class="memo_delete btn btn-danger" name="delete">削除</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       {% endfor %}
-    </ul>
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
