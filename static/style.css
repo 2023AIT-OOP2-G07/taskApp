@@ -16,20 +16,6 @@ body{
 
 #memo_textarea {
   resize: none;
-  width: 98%;
-  height: 65vh;
-}
-
-.memo_textarea_buttons {
-  box-sizing: border-box;
-  text-align: center;
-  display: flex;
-}
-
-.memo_textarea_save, .memo_textarea_delete{
   width: 100%;
-}
-
-.memo_list_suggest{
-  display: flex;
+  height: 65vh;
 }
