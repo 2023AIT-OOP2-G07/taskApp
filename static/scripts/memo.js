@@ -44,8 +44,8 @@ function memoTxtKeydown(e) {
 
 // メモ編集ボタンクリック時の処理
 async function memoEditBtn(e) {
-  const memoEdit = document.querySelector(".memo_key");
-  const key = memoEdit.value;
+  const target = e.target;
+  const key = target.value;
 
   const memo_dict = await getMemoDict();
   const memo = memo_dict[key];
